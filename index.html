@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="hero card hero-grid">
+  <div>
+    <span class="pill">AI ishora tarjimoni</span>
+    <h1>Imo-ishora, matn va ovozni bitta qulay platformada birlashtiring.</h1>
+    <p class="muted">Silent Voice foydalanuvchiga kamera orqali ishorani tarjima qilish, o'rganish markazi, avatar va offline kutubxonadan foydalanish imkonini beradi.</p>
+    <div class="hero-actions">
+      <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Ro'yxatdan o'tish</a>
+      <a href="{{ url_for('auth.login') }}" class="btn">Kirish</a>
+    </div>
+  </div>
+  <div class="mock-phone">
+    <div class="phone-screen hero-live-preview" data-translator-endpoint="{{ url_for('api.recognize_sign') }}">
+      <div class="hero-camera-shell">
+        <video id="homeCamera" class="camera-box hero-preview-video hidden" autoplay playsinline muted></video>
+        <div id="homeCameraPlaceholder" class="camera-placeholder hero-preview-placeholder">
+          <strong>AI Live Camera</strong>
+          <p>Foydalanuvchi ishora qilganda, AI uning ma'nosini shu yerning o'zida tarjima qiladi.</p>
+        </div>
+        <canvas id="homeCameraCanvas" class="hidden"></canvas>
+      </div>
+      <div class="result-box hero-result-box" aria-live="polite">
+        <span class="result-label">AI tarjima</span>
+        <strong id="homeRecognizedText">Kamerani yoqing va imo-ishora qiling</strong>
+        <small id="homeRecognitionStatus" class="result-status">Preview rejimi tayyor</small>
+      </div>
+      <div class="hero-actions hero-phone-actions">
+        <button id="homeCameraToggleBtn" class="btn btn-primary small" type="button">Kamerani yoqish</button>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('main.live_camera') }}" class="btn small">Katta kamera sahifasi</a>
+        {% else %}
+        <a href="{{ url_for('auth.login') }}" class="btn small">Kirish qilib ochish</a>
+        {% endif %}
+      </div>
+      <div class="hero-transcript-box">
+        <span class="result-label">So'nggi tarjimalar</span>
+        <div id="homeTranscript" class="chips">
+          <span class="chip">AI tayyor</span>
+        </div>
+      </div>
+      <div class="chips">
+        <span class="chip">Live AI</span>
+        <span class="chip">Sign to text</span>
+        <span class="chip">Realtime preview</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="grid three mt-24">
+  <article class="card"><h3>Jonli tarjima</h3><p class="muted">Kamera foydalanuvchi ko'rsatgan ishorani AI yordamida tezda matnga aylantiradi.</p></article>
+  <article class="card"><h3>O'rganish markazi</h3><p class="muted">Alifbo, tibbiyot, do'kon va kundalik muloqot bo'yicha ishoralar bir joyda jamlangan.</p></article>
+  <article class="card"><h3>Boshqaruv</h3><p class="muted">Fikr-mulohaza, foydalanuvchi faolligi va ishoralar bo'yicha ma'lumotlarni ko'rish mumkin.</p></article>
+</section>
+
+<section class="mt-24">
+  <div class="section-head"><h2>Tavsiya etilgan ishoralar</h2></div>
+  <div class="grid two">
+    {% for sign in featured %}
+    <article class="card sign-card"><h3>{{ sign.title }}</h3><p>{{ sign.meaning }}</p><small>{{ sign.category }}</small></article>
+    {% endfor %}
+  </div>
+</section>
+<script src="{{ url_for('static', filename='js/home_live_preview.js', v='cam-home-1') }}"></script>
+{% endblock %}
